@@ -9,11 +9,12 @@
   </head>
   <body>
 
+  <div class="chartone">
+    <h2>First chart</h2>
+    <canvas id="chart"></canvas>
+  </div>
 
-<div class="chartone">
-  <h2>First chart</h2>
-  <canvas id="chart"></canvas>
-</div>
+
 
 
 
