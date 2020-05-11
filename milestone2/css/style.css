@@ -1,0 +1,12 @@
+*{
+  margin:0;
+  padding:0;
+  box-sizing: border-box;
+}
+
+.chartone{
+  width:40%;
+  height: 40%;
+  text-align: center;
+  margin: 3% 30%;
+}
