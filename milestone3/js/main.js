@@ -10,7 +10,6 @@ function createLineChart (ctx, data, type){
       var chartone = new Chart (ctx, {
         type: type,
         data: {
-          level:'guest',
           labels: months,
           datasets: [{
             label: 'Fatturato',
@@ -50,7 +49,6 @@ function createLineChart (ctx, data, type){
 
           type: type,
           data: {
-            level:'employee',
             labels: labels,
             datasets: [{
               label: 'Fatturato by Agent',
@@ -75,7 +73,6 @@ function createLineChart (ctx, data, type){
             var chartone = new Chart (ctx, {
               type: type,
               data: {
-                level:'clevel',
                 labels: months,
                 datasets: [{
                   label: 'Team1',
