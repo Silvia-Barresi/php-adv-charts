@@ -55,9 +55,9 @@ function createPieChart (ctx, data){
       var ctx = ctx;
       var chartone = new Chart (ctx, {
 
-        type: data['type'],
+        type: type['type'],
         data: {
-          labels: data['labels'],
+          labels: labels['labels'],
           datasets: [{
             label: 'Fatturato by Agent',
             data: data['data'],
@@ -78,38 +78,36 @@ function createPieChart (ctx, data){
 function createMultiLineChart (ctx, data){
 
 
-      var label = [];
-      var dati = [];
-        for (var key in data['data']) {
-            label.push(data[key]);
+      var datasets = [];
+
+        for (var team in data['data']) {
+            dasets.push({
+              label: team,
+              data: data['data'][team]
+            });
         }
-        for (var key in data['data']) {
-            dati.push(data[key]);
-        }
+
       var ctx = ctx;
       var chartone = new Chart (ctx, {
         type: data['type'],
         data: {
           labels: months,
           datasets: [{
-            label: label,
-            data: data,
+            datasets:datasets,
             backgroundColor: ['rgba(230,230,250,1)',
                              ],
             borderColor: '#262640',
             borderWidth: 1
           },
           {
-            label: label,
-            data: data,
+            datasets:datasets,
             backgroundColor: ['rgba(230,230,250,1)',
                              ],
             borderColor: '#fefe33',
             borderWidth: 1
           },
           {
-            label: label,
-            data: data,
+            datasets:datasets,
             backgroundColor: ['rgba(230,230,250,1)',
                              ],
             borderColor: '#000080',
