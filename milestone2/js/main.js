@@ -72,10 +72,6 @@ function printCharts() {
 
   var months = getMonths();
 
-  var searchP = new URLSearchParams (window.location.search);
-  var level = searchP.get('level');
-  var access = {"access": level};
-
 
   $.ajax({
 
