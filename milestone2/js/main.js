@@ -1,22 +1,14 @@
-function printLineChart() {
+function getMonths(){
+  return moment.months();
+}
 
+var months = moment.months();
 
+function createLineChart (ctx, data, type){
 
-  $.ajax({
-
-    url:'server.php',
-    method: 'GET',
-    success: function(fullData){
-      console.log(fullData);
-
-      var months = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'];
-      var type = fullData.fatturato['type'];
-      var data = fullData.fatturato['data'];
-      var ctx = $('#chart');
+      var ctx = ctx;
       var chartone = new Chart (ctx, {
-
         type: type,
-
         data: {
           labels: months,
           datasets: [{
@@ -48,46 +40,18 @@ function printLineChart() {
                   }
               }
           });
-    },
+      }
 
-
-    error: function (errore){
-
-    }
-
-
-  });
-
-
-
-  $.ajax({
-
-    url:'server.php',
-    method: 'GET',
-    success: function(fullData){
-      console.log(fullData);
-
-      var fatturatoByAgent = fullData.fatturato_by_agent['data'];
-      var type = fullData.fatturato_by_agent['type'];
-      var names = [];
-      var dati = [];
-
-        for (var key in fatturatoByAgent) {
-          names.push(key);
-          dati.push(fatturatoByAgent[key]);
-        }
-
-
-
-      var ctx = $('#chartpie');
+function createPieChart (ctx, data, type, labels){
+      var ctx = ctx;
       var chartone = new Chart (ctx, {
 
         type: type,
         data: {
-          labels: names,
+          labels: labels,
           datasets: [{
             label: 'Fatturato by Agent',
-            data: dati,
+            data: data,
             backgroundColor: [
                                'rgba(230,230,250,1)',
                                'rgba(100,149,237,1)',
@@ -100,6 +64,26 @@ function printLineChart() {
               },
 
           });
+    };
+
+
+
+function printCharts() {
+
+  var months = getMonths();
+
+  var searchP = new URLSearchParams (window.location.search);
+  var level = searchP.get('level');
+  var access = {"access": level};
+
+
+  $.ajax({
+
+    url:'fatturato.php',
+    method: 'GET',
+    success: function(data){
+      console.log(data);
+      createLineChart ($('#chartline'), data['data'], data['type'] );
     },
 
 
@@ -112,11 +96,32 @@ function printLineChart() {
 
 
 
+
+  $.ajax({
+
+    url:'fatturatoAgent.php',
+    method: 'GET',
+    success: function(data){
+      console.log(data);
+
+        createPieChart ($('#chartpie'), data['data'], data['type'], data['labels']);
+      },
+
+
+      error: function (errore){
+
+      }
+
+
+  });
+
+
 };
 
 
 function init(){
-  printLineChart();
+  printCharts();
+  getMonths();
 }
 
 $(document).ready(init);

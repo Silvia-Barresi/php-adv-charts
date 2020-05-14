@@ -1,19 +1,27 @@
 function getMonths(){
   return moment.months();
 }
+var months = getMonths();
 
-var months = moment.months();
+function level(){
+  var search = window.location;
+  var searchLevel = new URL(search);
+  var level = searchLevel.searchParams.get('level');
 
-function createLineChart (ctx, data, type){
+  console.log(level);
+  return level;
+}
+
+function createLineChart (ctx, data){
 
       var ctx = ctx;
       var chartone = new Chart (ctx, {
-        type: type,
+        type: data['type'],
         data: {
           labels: months,
           datasets: [{
             label: 'Fatturato',
-            data: data,
+            data: data['data'],
             backgroundColor: ['rgba(230,230,250,1)',
                              'rgba(176,224,230,1)',
                              'rgba(173,216,230,1)',
@@ -43,87 +51,105 @@ function createLineChart (ctx, data, type){
       }
 
 
-  function createPieChart (ctx, data, type, labels){
-        var ctx = ctx;
-        var chartone = new Chart (ctx, {
+function createPieChart (ctx, data){
+      var ctx = ctx;
+      var chartone = new Chart (ctx, {
 
-          type: type,
-          data: {
-            labels: labels,
-            datasets: [{
-              label: 'Fatturato by Agent',
-              data: data,
-              backgroundColor: [
-                                 'rgba(230,230,250,1)',
-                                 'rgba(100,149,237,1)',
-                                 'rgba(173,216,230,1)',
-                                 'rgba(135,206,250,1)',
-                               ],
-              borderColor: '#262640',
-              borderWidth: 1
-                  }]
-                },
+        type: data['type'],
+        data: {
+          labels: data['labels'],
+          datasets: [{
+            label: 'Fatturato by Agent',
+            data: data['data'],
+            backgroundColor: [
+                               'rgba(230,230,250,1)',
+                               'rgba(100,149,237,1)',
+                               'rgba(173,216,230,1)',
+                               'rgba(135,206,250,1)',
+                             ],
+            borderColor: '#262640',
+            borderWidth: 1
+                }]
+              },
 
-            });
-      };
+          });
+    };
 
-      function createMultiLineChart (ctx, data, type){
+function createMultiLineChart (ctx, data){
 
-            var ctx = ctx;
-            var chartone = new Chart (ctx, {
-              type: type,
-              data: {
-                labels: months,
-                datasets: [{
-                  label: 'Team1',
-                  data: data[0],
-                  backgroundColor: ['rgba(230,230,250,1)',
-                                   ],
-                  borderColor: '#262640',
-                  borderWidth: 1
-                },
-                {
-                  label: 'Team2',
-                  data: data[1],
-                  backgroundColor: ['rgba(230,230,250,1)',
-                                   ],
-                  borderColor: '#fefe33',
-                  borderWidth: 1
-                },
-                {
-                  label: 'Team3',
-                  data: data[2],
-                  backgroundColor: ['rgba(230,230,250,1)',
-                                   ],
-                  borderColor: '#000080',
-                  borderWidth: 1
+
+      var label = [];
+      var dati = [];
+        for (var key in data['data']) {
+            label.push(data[key]);
+        }
+        for (var key in data['data']) {
+            dati.push(data[key]);
+        }
+      var ctx = ctx;
+      var chartone = new Chart (ctx, {
+        type: data['type'],
+        data: {
+          labels: months,
+          datasets: [{
+            label: label,
+            data: data,
+            backgroundColor: ['rgba(230,230,250,1)',
+                             ],
+            borderColor: '#262640',
+            borderWidth: 1
+          },
+          {
+            label: label,
+            data: data,
+            backgroundColor: ['rgba(230,230,250,1)',
+                             ],
+            borderColor: '#fefe33',
+            borderWidth: 1
+          },
+          {
+            label: label,
+            data: data,
+            backgroundColor: ['rgba(230,230,250,1)',
+                             ],
+            borderColor: '#000080',
+            borderWidth: 1
+                }]
+              },
+              options: {
+                  scales: {
+                      yAxes: [{
+                          ticks: {
+                              beginAtZero: true
+                          }
                       }]
-                    },
-                    options: {
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero: true
-                                }
-                            }]
-                        }
-                    }
-                });
-            }
+                  }
+              }
+          });
+      }
 
 function printCharts() {
-
-  var months = getMonths();
-
 
 
   $.ajax({
 
-    url:'fatturato.php',
+    url:'server.php',
     method: 'GET',
+    data:{
+      level:level()
+    },
     success: function(data){
       console.log(data);
-      createLineChart ($('#chartline'), data ['data'], data['type'] );
+
+      if (data['fatturato']) {
+        createLineChart ($('#chartline'), data['fatturato']);
+      }
+      if (data['fatturato_by_agent']) {
+        createPieChart ($('#chartpie'), data['fatturato_by_agent']);
+      }
+      if (data['team_efficiency']) {
+        createMultiLineChart($('#chartfine'), data['team_efficiency']);
+      }
     },
 
 
@@ -134,52 +160,13 @@ function printCharts() {
 
   });
 
-
-
-
-
-  $.ajax({
-
-    url:'fatturatoAgent.php',
-    method: 'GET',
-    success: function(data){
-      console.log(data);
-
-        createPieChart ($('#chartpie'), data['data'], data['type'], data['labels']);
-      },
-
-
-      error: function (errore){
-
-      }
-
-
-  });
-
-  $.ajax({
-
-    url:'teamEfficiency.php',
-    method: 'GET',
-    success: function(data){
-      console.log(data);
-
-        createMultiLineChart($('#chartfine'), data['data'], data['type']);
-      },
-
-
-      error: function (errore){
-
-      }
-
-
-  });
-
 };
 
 
 function init(){
   printCharts();
   getMonths();
+  level();
 }
 
 $(document).ready(init);
