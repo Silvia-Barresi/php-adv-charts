@@ -1,7 +1,9 @@
 <?php
 
-header("Content-Type: application/json");
 include "data.php";
+
+header("Content-Type: application/json");
+
 
 
 function fatturatoByAgent($graphs){

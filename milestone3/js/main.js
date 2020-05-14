@@ -55,9 +55,9 @@ function createPieChart (ctx, data){
       var ctx = ctx;
       var chartone = new Chart (ctx, {
 
-        type: type['type'],
+        type: data['type'],
         data: {
-          labels: labels['labels'],
+          labels: data['labels'],
           datasets: [{
             label: 'Fatturato by Agent',
             data: data['data'],
@@ -73,19 +73,12 @@ function createPieChart (ctx, data){
               },
 
           });
-    };
+    }
 
 function createMultiLineChart (ctx, data){
 
 
-      var datasets = [];
 
-        for (var team in data['data']) {
-            dasets.push({
-              label: team,
-              data: data['data'][team]
-            });
-        }
 
       var ctx = ctx;
       var chartone = new Chart (ctx, {
@@ -93,21 +86,24 @@ function createMultiLineChart (ctx, data){
         data: {
           labels: months,
           datasets: [{
-            datasets:datasets,
+            label: 'Team 1',
+            data:data['data']['Team1'],
             backgroundColor: ['rgba(230,230,250,1)',
                              ],
             borderColor: '#262640',
             borderWidth: 1
           },
           {
-            datasets:datasets,
+            label: 'Team 2',
+            data:data['data']['Team2'],
             backgroundColor: ['rgba(230,230,250,1)',
                              ],
             borderColor: '#fefe33',
             borderWidth: 1
           },
           {
-            datasets:datasets,
+            label: 'Team 2',
+            data:data['data']['Team3'],
             backgroundColor: ['rgba(230,230,250,1)',
                              ],
             borderColor: '#000080',
@@ -140,10 +136,10 @@ function printCharts() {
       console.log(data);
 
       if (data['fatturato']) {
-        createLineChart ($('#chartline'), data['fatturato']);
+        createLineChart($('#chartline'), data['fatturato']);
       }
       if (data['fatturato_by_agent']) {
-        createPieChart ($('#chartpie'), data['fatturato_by_agent']);
+        createPieChart($('#chartpie'), data['fatturato_by_agent']);
       }
       if (data['team_efficiency']) {
         createMultiLineChart($('#chartfine'), data['team_efficiency']);

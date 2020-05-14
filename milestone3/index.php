@@ -11,17 +11,15 @@
   <body>
 
   <div class="chartone">
-    <h2>Fatturato</h2>
+    <h1>Grafici</h1>
     <canvas id="chartline"></canvas>
   </div>
 
   <div class="chartone">
-    <h2>Fatturato by Agent</h2>
     <canvas id="chartpie"></canvas>
   </div>
 
   <div class="chartone">
-    <h2>Team Efficiency</h2>
     <canvas id="chartfine"></canvas>
   </div>
 
